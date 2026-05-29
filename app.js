@@ -15,7 +15,18 @@ app.use((req, res, next) => {
 
 app.use('/feed', feedRoutes);
 mongoose.connect(process.env.MONGODB_URL)
-    .then(() => {
-        app.listen(8080);
-    })
-    .catch(err => console.log(err));
+.then(() => {
+    console.log('MongoDB Connected');
+
+    app.listen(8080, () => {
+        console.log('Server running on port 8080');
+    });
+})
+.catch(err => {
+    console.log(err);
+});
+    // .then(() => {
+    //      console.log('MongoDB Connected');
+    //     app.listen(8080);
+    // })
+    // .catch(err => console.log(err));
