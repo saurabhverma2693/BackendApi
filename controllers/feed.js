@@ -20,10 +20,10 @@ exports.createPost = (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(422).json({
-            message: 'validation failed,enter data is incorrect',
-            errors: errors.array()
-        });
+
+        const error = new Error('validation failed,enter data is incorrect');
+        error.statuscode = 422;
+        throw error;
     }
 
     const title = req.body.title;
@@ -32,7 +32,7 @@ exports.createPost = (req, res, next) => {
     const post = new Post({
         title: title,
         content: content,
-        imageUrl : 'Images/Girls.jpg',
+        imageUrl: 'Images/Girls.jpg',
         creator: {
             name: 'Saurabh Verma'
         }
@@ -49,11 +49,10 @@ exports.createPost = (req, res, next) => {
             }
         )
         .catch((err) => {
-            console.log(err);
-
+            if (!err.statuscode) {
+                err.statuscode = 500;
+            }
+            next(err);
         });
-
-
 }
-
 []
